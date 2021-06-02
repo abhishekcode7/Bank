@@ -14,7 +14,7 @@ function App() {
     <Router>
       <div className="App">
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <ul className="navbar-nav mr-auto">
+            <ul className="navbar-nav ml-auto">
               <li><Link to={'/'} className="nav-link"> Banks </Link></li>
               <li><Link to={'/requests'} className="nav-link">Requests</Link></li>
               <li><Link to={'/dashboard'} className="nav-link">Dashboard</Link></li>

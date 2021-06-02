@@ -1,61 +1,52 @@
 import { Card , Button, Image } from "react-bootstrap"
 import "./Banks.css"
-import sample from "../images/sample.jpg"
+import sample from "../images/sample.png"
 const Banks = () =>{
     return(
         <div>
             <div className="Bank-container">
-                <Card style={{ width: '18rem' }}>
-                <Card.Img variant="top" src={sample} />
+                <Card border="light" style={{ width: '10rem',height:'17rem' }}>
+                <Card.Img className="card-img" variant="top" src={sample} />
                 <Card.Body>
                     <Card.Title>Card Title</Card.Title>
-                    <Card.Text>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
+                    <Card.Text>abc
                     </Card.Text>
-                    <Button variant="primary">Go somewhere</Button>
+                    <Button variant="success">Login</Button>
                 </Card.Body>
                 </Card>
 
-                <Card style={{ width: '18rem' }}>
-                <Card.Img variant="top" src={sample} />
+                <Card border="light" style={{ width: '10rem',height:'17rem' }}>
+                <Card.Img className="card-img" variant="top" src={sample} />
                 <Card.Body>
                     <Card.Title>Card Title</Card.Title>
-                    <Card.Text>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
+                    <Card.Text>abc
                     </Card.Text>
-                    <Button variant="primary">Go somewhere</Button>
+                    <Button variant="success">Login</Button>
                 </Card.Body>
                 </Card>
 
-                <Card style={{ width: '18rem' }}>
-                <Card.Img variant="top" src={sample} />
+                <Card border="light" style={{ width: '10rem',height:'17rem' }}>
+                <Card.Img className="card-img" variant="top" src={sample} />
                 <Card.Body>
                     <Card.Title>Card Title</Card.Title>
-                    <Card.Text>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
+                    <Card.Text>abc
                     </Card.Text>
-                    <Button variant="primary">Go somewhere</Button>
+                    <Button variant="success">Login</Button>
                 </Card.Body>
                 </Card>
 
-                <Card style={{ width: '18rem' }}>
-                <Card.Img variant="top" src={sample} />
+                <Card border="light" style={{ width: '10rem',height:'17rem' }}>
+                <Card.Img className="card-img" variant="top" src={sample} />
                 <Card.Body>
                     <Card.Title>Card Title</Card.Title>
-                    <Card.Text>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
+                    <Card.Text>abc
                     </Card.Text>
-                    <Button variant="primary">Go somewhere</Button>
+                    <Button variant="success">Login</Button>
                 </Card.Body>
                 </Card>
             </div>
-            <br/>
             <div class="text-center">
-            <Image src={sample} style={{ width: '12rem' }} rounded />
+            <Image className="captcha" src={sample} style={{ width: '10rem' }} rounded />
             </div>
             <form>
             <div className="form-group">
