@@ -15,6 +15,7 @@ const Banks = () => {
   const [logStart, setLogStart] = useState(0);
   const [showCap, setShowCap] = useState(0);
   const [otpButton, setOtpButton] = useState(0);
+  const [loop, setLoop] = useState(0);
   const styleCard = {
     maxWidth: "210px",
   };
@@ -24,6 +25,12 @@ const Banks = () => {
       setSeconds(seconds - 1);
     }, 1000);
   }, [seconds, logStart]);
+  useEffect(() => {
+    setTimeout(() => {
+      console.log(loop);
+      setLoop((loop + 1) % 10);
+    }, 5000);
+  }, [loop]);
   let runScript = (e) => {
     e.preventDefault();
     setLogStart(1);
