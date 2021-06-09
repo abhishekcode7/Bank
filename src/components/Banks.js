@@ -5,6 +5,8 @@ import sample from "../images/sample.png";
 import React from "react";
 import sbi from "../images/sbi.png";
 import axios from "axios";
+import { TextField, Button } from "@material-ui/core";
+import Login from "./Login";
 const Banks = () => {
   const [captcha, setCap] = useState("");
   const [capImg, setImg] = useState("Getting captcha ...");
@@ -16,6 +18,8 @@ const Banks = () => {
   const [showCap, setShowCap] = useState(0);
   const [otpButton, setOtpButton] = useState(0);
   const [loop, setLoop] = useState(0);
+  const [userSetting, setUserSetting] = useState(0);
+
   const styleCard = {
     maxWidth: "210px",
   };
@@ -51,6 +55,7 @@ const Banks = () => {
   let runScript = (e) => {
     e.preventDefault();
     setLogStart(1);
+    setUserSetting(0);
     fetch("/api/runScript").then((res) => res.json());
   };
   let submitCap = (e) => {
@@ -80,7 +85,7 @@ const Banks = () => {
           setShowCap(0);
           alert(" You entered wrong OTP , Please login again ");
         } else {
-          axios.post("/api/loop3", send).then((res));
+          axios.post("/api/loop3", send).then(res);
           // .catch((err) => console.log(err));
         }
       })
@@ -99,12 +104,12 @@ const Banks = () => {
   return (
     <div>
       <div className="Bank-container">
-        <div className="card mb-3" style={styleCard}>
+        <div className="card mb-4" style={styleCard}>
           <div className="row no-gutters">
-            <div className="col-md-3 text-center mx-auto d-flex align-items-center">
+            <div className="col-md-2 text-center mx-auto d-flex align-items-center">
               <img src={sbi} className="card-img" alt="..." />
             </div>
-            <div className="col-md-6">
+            <div className="col-md-9">
               <div className="card-body">
                 <h5 className="card-title">SBI </h5>
                 {sbiStatus === 1 ? (
@@ -116,7 +121,14 @@ const Banks = () => {
                     Session Out
                   </p>
                 )}
-
+                <Button
+                  color="primary"
+                  size="small"
+                  title="Change bank login details"
+                  onClick={() => setUserSetting(1)}
+                >
+                  Edit Details
+                </Button>
                 {sbiStatus === 1 || showCap === 1 || otpButton === 1 ? (
                   ""
                 ) : (
@@ -136,12 +148,12 @@ const Banks = () => {
           </div>
         </div>
 
-        <div className="card mb-3" style={styleCard}>
+        <div className="card mb-4" style={styleCard}>
           <div className="row no-gutters">
-            <div className="col-md-3 text-center mx-auto d-flex align-items-center">
+            <div className="col-md-2 text-center mx-auto d-flex align-items-center">
               <img src={sample} className="card-img" alt="..." />
             </div>
-            <div className="col-md-6">
+            <div className="col-md-9">
               <div className="card-body">
                 <h5 className="card-title">ICICI </h5>
                 {iciStatus === 1 ? (
@@ -153,6 +165,9 @@ const Banks = () => {
                     Session Out
                   </p>
                 )}
+                <Button color="primary" size="small">
+                  Edit Details
+                </Button>
                 {iciStatus === 1 ? (
                   ""
                 ) : (
@@ -184,6 +199,13 @@ const Banks = () => {
       ) : (
         ""
       )} */}
+      {/* <div className="text-center">
+        <TextField id="outlined-basic" label="Outlined" variant="outlined" size="small"/>
+        <Button variant="contained" color="primary">
+          Primary
+        </Button>
+      </div> */}
+      {userSetting === 1 ? <Login /> : ""}
       <div className="text-center">
         {logStart === 1 && showCap === 0 && otpButton === 0 ? (
           <div>Getting captcha</div>

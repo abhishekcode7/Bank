@@ -23,8 +23,8 @@ function createData(bank, cash, fund) {
   return { bank, cash, fund };
 }
 let rows = [
-  createData("ICICI", 4525, 6),
-  createData("SBI", 237, 9),
+  createData("SBI", 4525, 6),
+  createData("ICICI", 237, 9),
   createData("AXIS", 262, 16),
 ];
 const Dashboard = () => {
