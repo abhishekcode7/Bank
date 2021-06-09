@@ -7,7 +7,7 @@ import sbi from "../images/sbi.png";
 import axios from "axios";
 const Banks = () => {
   const [captcha, setCap] = useState("");
-  const [capImg, setImg] = useState("getting captcha");
+  const [capImg, setImg] = useState("Getting captcha ...");
   const [sbiStatus, setSbiStatus] = useState(0);
   const [iciStatus, setIciStatus] = useState(0);
   const [otp, setOtp] = useState(0);
@@ -27,42 +27,75 @@ const Banks = () => {
   }, [seconds, logStart]);
   useEffect(() => {
     setTimeout(() => {
-      console.log(loop);
+      fetch("/api/status")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.st === "1") {
+            setSbiStatus(1);
+            setOtpButton(0);
+            setShowCap(0);
+            setLogStart(0);
+          } else setSbiStatus(0);
+        });
+      fetch("/api/checkCaptcha")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.image !== "0") {
+            setImg(data.image.substring(2, data.image.length - 1));
+            setShowCap(1);
+          }
+        });
       setLoop((loop + 1) % 10);
-    }, 5000);
+    }, 1000);
   }, [loop]);
   let runScript = (e) => {
     e.preventDefault();
     setLogStart(1);
-    fetch("/runScript").then((res) => res.json());
+    fetch("/api/runScript").then((res) => res.json());
   };
   let submitCap = (e) => {
     e.preventDefault();
-    setOtpButton(1);
     const send = { cap: captcha };
     axios
-      .post("/submitCaptcha", send)
-      .then((res) => console.log(res))
+      .post("/api/submitCaptcha", send)
+      .then((res) => {
+        if (res.data.code === "0") {
+          setLogStart(0);
+          setOtpButton(0);
+          setShowCap(0);
+          alert(" You entered wrong Captcha , Please login again ");
+        } else setOtpButton(1);
+      })
       .catch((err) => console.log(err));
   };
   let submitOTP = (e) => {
     e.preventDefault();
     const send = { OTP: otp };
     axios
-      .post("/submitOtp", send)
-      .then((res) => console.log(res))
+      .post("/api/submitOtp", send)
+      .then((res) => {
+        if (res.data.code === "0") {
+          setLogStart(0);
+          setOtpButton(0);
+          setShowCap(0);
+          alert(" You entered wrong OTP , Please login again ");
+        } else {
+          axios.post("/api/loop3", send).then((res));
+          // .catch((err) => console.log(err));
+        }
+      })
       .catch((err) => console.log(err));
   };
-  let getCaptcha = (e) => {
-    setShowCap(1);
-    setLogStart(0);
-    setSeconds(7);
-    fetch("/getImg")
-      .then((res) => res.json())
-      .then((data) => {
-        setImg(data.image.substring(2, data.image.length - 1));
-      });
-  };
+  // let getCaptcha = (e) => {
+  //   setShowCap(1);
+  //   setLogStart(0);
+  //   setSeconds(7);
+  //   fetch("/api/getImg")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setImg(data.image.substring(2, data.image.length - 1));
+  //     });
+  // };
   return (
     <div>
       <div className="Bank-container">
@@ -75,12 +108,16 @@ const Banks = () => {
               <div className="card-body">
                 <h5 className="card-title">SBI </h5>
                 {sbiStatus === 1 ? (
-                  <p className="card-text">Logged In</p>
+                  <p className="card-text" style={{ color: "green" }}>
+                    Logged In
+                  </p>
                 ) : (
-                  <p className="card-text">Session Out</p>
+                  <p className="card-text" style={{ color: "red" }}>
+                    Session Out
+                  </p>
                 )}
 
-                {sbiStatus === 1 ? (
+                {sbiStatus === 1 || showCap === 1 || otpButton === 1 ? (
                   ""
                 ) : (
                   <button
@@ -108,9 +145,13 @@ const Banks = () => {
               <div className="card-body">
                 <h5 className="card-title">ICICI </h5>
                 {iciStatus === 1 ? (
-                  <p className="card-text">Logged In</p>
+                  <p className="card-text" style={{ color: "green" }}>
+                    Logged In
+                  </p>
                 ) : (
-                  <p className="card-text">Session Out</p>
+                  <p className="card-text" style={{ color: "red" }}>
+                    Session Out
+                  </p>
                 )}
                 {iciStatus === 1 ? (
                   ""
@@ -130,51 +171,9 @@ const Banks = () => {
             </div>
           </div>
         </div>
-        {/* <Card border="light" style={{ width: "10rem", height: "17rem" }}>
-          <Card.Img className="card-img" variant="top" src={sample} />
-          <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>abc</Card.Text>
-            <Button onClick={runScript} variant="success">
-              Login
-            </Button>
-          </Card.Body>
-        </Card>
-
-        <Card border="light" style={{ width: "10rem", height: "17rem" }}>
-          <Card.Img className="card-img" variant="top" src={sample} />
-          <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>abc</Card.Text>
-            <Button variant="success">Login</Button>
-          </Card.Body>
-        </Card>
-
-        <Card border="light" style={{ width: "10rem", height: "17rem" }}>
-          <Card.Img className="card-img" variant="top" src={sample} />
-          <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>abc</Card.Text>
-            <Button variant="success">Login</Button>
-          </Card.Body>
-        </Card>
-
-        <Card border="light" style={{ width: "10rem", height: "17rem" }}>
-          <Card.Img className="card-img" variant="top" src={sample} />
-          <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>abc</Card.Text>
-            <Button variant="success">Login</Button>
-          </Card.Body>
-        </Card> */}
       </div>
-      {/* <Countdown date={Date.now() + 10000} /> */}
-      {logStart === 1 && seconds > 0 ? (
-        <div>Please wait {seconds}s for captcha</div>
-      ) : (
-        ""
-      )}
-      {seconds === 0 ? (
+      {/* {logStart === 1 && seconds > 0 ? <div>Getting Captcha ...</div> : ""} */}
+      {/* {seconds === 0 ? (
         <button
           type="button"
           onClick={getCaptcha}
@@ -184,9 +183,14 @@ const Banks = () => {
         </button>
       ) : (
         ""
-      )}
+      )} */}
       <div className="text-center">
-        {showCap === 1 ? (
+        {logStart === 1 && showCap === 0 && otpButton === 0 ? (
+          <div>Getting captcha</div>
+        ) : (
+          ""
+        )}
+        {showCap === 1 && otpButton === 0 ? (
           <Image
             className="captcha"
             src={`data:image/png;base64,${capImg}`}
@@ -198,7 +202,7 @@ const Banks = () => {
         )}
       </div>
       <form>
-        {showCap === 1 ? (
+        {showCap === 1 && otpButton === 0 ? (
           <div className="form-group">
             <input
               type="text"
@@ -225,7 +229,7 @@ const Banks = () => {
         ) : (
           ""
         )}
-        {showCap === 1 ? (
+        {showCap === 1 && otpButton === 0 ? (
           <button
             type="submit"
             onClick={submitCap}
