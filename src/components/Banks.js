@@ -5,7 +5,7 @@ import sample from "../images/sample.png";
 import React from "react";
 import sbi from "../images/sbi.png";
 import axios from "axios";
-import { TextField, Button } from "@material-ui/core";
+import { TextField, Button, Box } from "@material-ui/core";
 import Login from "./Login";
 const Banks = () => {
   const [captcha, setCap] = useState("");
@@ -56,7 +56,20 @@ const Banks = () => {
     e.preventDefault();
     setLogStart(1);
     setUserSetting(0);
-    fetch("/api/runScript").then((res) => res.json());
+    fetch("/api/runScript")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code === "0") {
+          setLogStart(0);
+          setShowCap(0);
+          alert(
+            "Please Update Bank Details (Invalid Credentials) . One or both Id / Pass is null field"
+          );
+        }
+      })
+      .catch((err) => {
+        alert("Login failed ! Please Try Again ");
+      });
   };
   let submitCap = (e) => {
     e.preventDefault();
@@ -68,7 +81,9 @@ const Banks = () => {
           setLogStart(0);
           setOtpButton(0);
           setShowCap(0);
-          alert(" You entered wrong Captcha , Please login again ");
+          alert(
+            " You entered wrong Captcha or Invalid Credentials , Please login again "
+          );
         } else setOtpButton(1);
       })
       .catch((err) => console.log(err));
@@ -199,12 +214,30 @@ const Banks = () => {
       ) : (
         ""
       )} */}
-      {/* <div className="text-center">
-        <TextField id="outlined-basic" label="Outlined" variant="outlined" size="small"/>
-        <Button variant="contained" color="primary">
-          Primary
+      {/* <Box
+        display="flex"
+        // width={500}
+        height={80}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <TextField
+          id="outlined-basic"
+          label="Enter Captcha"
+          variant="outlined"
+          size="small"
+          onChange={(event) => setCap(event.target.value)}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          size="medium"
+          style={{ marginLeft: "10px" }}
+          onClick={submitCap}
+        >
+          Submit
         </Button>
-      </div> */}
+      </Box> */}
       {userSetting === 1 ? <Login /> : ""}
       <div className="text-center">
         {logStart === 1 && showCap === 0 && otpButton === 0 ? (
@@ -225,47 +258,58 @@ const Banks = () => {
       </div>
       <form>
         {showCap === 1 && otpButton === 0 ? (
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control captcha-text"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              placeholder={captcha}
+          <Box
+            display="flex"
+            // width={500}
+            height={80}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <TextField
+              id="outlined-basic"
+              label="Enter Captcha"
+              variant="outlined"
+              size="small"
               onChange={(event) => setCap(event.target.value)}
             />
-          </div>
+            <Button
+              variant="contained"
+              color="primary"
+              size="medium"
+              style={{ marginLeft: "10px" }}
+              onClick={submitCap}
+            >
+              Submit
+            </Button>
+          </Box>
         ) : (
           ""
         )}
         {otpButton === 1 ? (
-          <div className="form-group">
-            <input
-              type="number"
-              className="form-control"
-              id="exampleInputPassword1"
-              placeholder="Enter OTP"
+          <Box
+            display="flex"
+            // width={500}
+            height={80}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <TextField
+              id="outlined-basic"
+              label="Enter OTP"
+              variant="outlined"
+              size="small"
               onChange={(event) => setOtp(event.target.value)}
             />
-          </div>
-        ) : (
-          ""
-        )}
-        {showCap === 1 && otpButton === 0 ? (
-          <button
-            type="submit"
-            onClick={submitCap}
-            className="btn btn-primary btn-submit"
-          >
-            Submit Captcha
-          </button>
-        ) : (
-          ""
-        )}
-        {otpButton === 1 ? (
-          <button type="submit" onClick={submitOTP} className="btn btn-primary">
-            Submit OTP
-          </button>
+            <Button
+              variant="contained"
+              color="primary"
+              size="medium"
+              style={{ marginLeft: "10px" }}
+              onClick={submitOTP}
+            >
+              Submit
+            </Button>
+          </Box>
         ) : (
           ""
         )}

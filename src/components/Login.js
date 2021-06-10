@@ -52,6 +52,9 @@ const Login = () => {
           <button type="submit" className="btn btn-primary" onClick={submitForm}>
             Submit
           </button>
+          <text className="form-text" style={{fontSize:"12px"}}>
+            *If you are currently logged in , changes will reflect in the next login
+          </text>
         </form>
       </div>
     </div>
