@@ -7,13 +7,14 @@ import sbi from "../images/sbi.png";
 import axios from "axios";
 import { TextField, Button, Box } from "@material-ui/core";
 import Login from "./Login";
+import { IoLogInOutline } from "react-icons/io5";
+import { FiEdit } from "react-icons/fi";
 const Banks = () => {
   const [captcha, setCap] = useState("");
   const [capImg, setImg] = useState("Getting captcha ...");
   const [sbiStatus, setSbiStatus] = useState(0);
   const [iciStatus, setIciStatus] = useState(0);
   const [otp, setOtp] = useState(0);
-  const [seconds, setSeconds] = React.useState(7);
   const [logStart, setLogStart] = useState(0);
   const [showCap, setShowCap] = useState(0);
   const [otpButton, setOtpButton] = useState(0);
@@ -23,12 +24,6 @@ const Banks = () => {
   const styleCard = {
     maxWidth: "210px",
   };
-  useEffect(() => {
-    if (seconds === 0 || logStart === 0) return;
-    setTimeout(() => {
-      setSeconds(seconds - 1);
-    }, 1000);
-  }, [seconds, logStart]);
   useEffect(() => {
     setTimeout(() => {
       fetch("/api/status")
@@ -101,25 +96,14 @@ const Banks = () => {
           alert(" You entered wrong OTP , Please login again ");
         } else {
           axios.post("/api/loop3", send).then(res);
-          // .catch((err) => console.log(err));
         }
       })
       .catch((err) => console.log(err));
   };
-  // let getCaptcha = (e) => {
-  //   setShowCap(1);
-  //   setLogStart(0);
-  //   setSeconds(7);
-  //   fetch("/api/getImg")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setImg(data.image.substring(2, data.image.length - 1));
-  //     });
-  // };
   return (
     <div>
       <div className="Bank-container">
-        <div className="card mb-4" style={styleCard}>
+        <div className="card mb-4 h-25" style={styleCard}>
           <div className="row no-gutters">
             <div className="col-md-2 text-center mx-auto d-flex align-items-center">
               <img src={sbi} className="card-img" alt="..." />
@@ -136,42 +120,40 @@ const Banks = () => {
                     Session Out
                   </p>
                 )}
-                <Button
-                  color="primary"
-                  size="small"
-                  title="Change bank login details"
-                  onClick={() => setUserSetting(1)}
-                >
-                  Edit Details
-                </Button>
-                {sbiStatus === 1 || showCap === 1 || otpButton === 1 ? (
-                  ""
-                ) : (
-                  <button
-                    type="button"
-                    onClick={runScript}
-                    className="btn btn-outline-success"
-                  >
-                    Login
-                  </button>
-                )}
-                {/* <p className="card-text">
-                  <small className="text-muted">Last updated 3 mins ago</small>
-                </p> */}
+
+                <div className="card-edits">
+                  <h4>
+                    <FiEdit
+                      title="Edit Bank Details"
+                      onClick={() => {
+                        userSetting === 1
+                          ? setUserSetting(0)
+                          : setUserSetting(1);
+                      }}
+                    />
+                  </h4>
+                  {sbiStatus === 1 || showCap === 1 || otpButton === 1 ? (
+                    ""
+                  ) : (
+                    <h2>
+                      <IoLogInOutline title="Login" onClick={runScript} />
+                    </h2>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="card mb-4" style={styleCard}>
+        <div className="card mb-4 h-25" style={styleCard}>
           <div className="row no-gutters">
             <div className="col-md-2 text-center mx-auto d-flex align-items-center">
               <img src={sample} className="card-img" alt="..." />
             </div>
             <div className="col-md-9">
               <div className="card-body">
-                <h5 className="card-title">ICICI </h5>
-                {iciStatus === 1 ? (
+                <h5 className="card-title">ICICI</h5>
+                {sbiStatus === 1 ? (
                   <p className="card-text" style={{ color: "green" }}>
                     Logged In
                   </p>
@@ -180,64 +162,27 @@ const Banks = () => {
                     Session Out
                   </p>
                 )}
-                <Button color="primary" size="small">
-                  Edit Details
-                </Button>
-                {iciStatus === 1 ? (
-                  ""
-                ) : (
-                  <button
-                    type="button"
-                    onClick={runScript}
-                    className="btn btn-outline-success"
-                  >
-                    Login
-                  </button>
-                )}
-                {/* <p className="card-text">
-                  <small className="text-muted">Last updated 3 mins ago</small>
-                </p> */}
+
+                <div className="card-edits">
+                  <h4>
+                    <FiEdit
+                      title="Edit Bank Details"
+                      onClick={() => setUserSetting(1)}
+                    />
+                  </h4>
+                  {sbiStatus === 1 || showCap === 1 || otpButton === 1 ? (
+                    ""
+                  ) : (
+                    <h2>
+                      <IoLogInOutline title="Login" onClick={runScript} />
+                    </h2>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/* {logStart === 1 && seconds > 0 ? <div>Getting Captcha ...</div> : ""} */}
-      {/* {seconds === 0 ? (
-        <button
-          type="button"
-          onClick={getCaptcha}
-          className="btn btn-outline-info"
-        >
-          Load Captcha
-        </button>
-      ) : (
-        ""
-      )} */}
-      {/* <Box
-        display="flex"
-        // width={500}
-        height={80}
-        alignItems="center"
-        justifyContent="center"
-      >
-        <TextField
-          id="outlined-basic"
-          label="Enter Captcha"
-          variant="outlined"
-          size="small"
-          onChange={(event) => setCap(event.target.value)}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          size="medium"
-          style={{ marginLeft: "10px" }}
-          onClick={submitCap}
-        >
-          Submit
-        </Button>
-      </Box> */}
       {userSetting === 1 ? <Login /> : ""}
       <div className="text-center">
         {logStart === 1 && showCap === 0 && otpButton === 0 ? (

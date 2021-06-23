@@ -8,10 +8,11 @@
     margin-bottom: 3px;
     margin-top: 3px;
 }
-/* .card-img{
-    width: 5px;
-    height: 100px;
-} */
+.card-edits{
+    display: flex;
+    justify-content: space-around;
+    align-items:center;
+}
 .btn-submit{
     margin-right: 40px;
 }
